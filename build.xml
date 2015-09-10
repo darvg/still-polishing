@@ -37,7 +37,7 @@
       </checkstyle>
   </target>
 
-  <target name="test" depends="checkstyle, jar" description="Compiles the code against WPILib and checks source format">
+  <target name="test" depends="checkstyle, compile" description="Compiles the code against WPILib and checks source format">
       <echo>Entered test function</echo>
   </target>
 

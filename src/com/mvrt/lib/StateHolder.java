@@ -1,9 +1,11 @@
 package com.mvrt.lib;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
-public class StateHolder {
+public class StateHolder implements Iterable<Map.Entry<String, Object>> {
   private HashMap<String, Object> states = new HashMap<String, Object>();
 
   public void put(String key, Object value) {
@@ -16,5 +18,10 @@ public class StateHolder {
 
   public Set<String> keySet() {
     return states.keySet();
+  }
+
+  @Override
+  public Iterator<Map.Entry<String, Object>> iterator() {
+    return states.entrySet().iterator();
   }
 }
