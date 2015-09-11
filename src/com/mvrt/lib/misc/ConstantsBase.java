@@ -6,6 +6,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -39,8 +40,34 @@ public abstract class ConstantsBase {
       return o instanceof Constant && this.name.equals(oname) && this.type.equals(otype)
           && this.value.equals(ovalue);
     }
+    
+    
   }
 
+  public void saveToFile() {
+    File file = getFile();
+    if (file == null) {
+        return;
+    }
+    try {
+        JSONObject json = getJsonObjectFromFile();
+        FileWriter writer = new FileWriter(file);
+        for (String key : modifiedKeys.keySet()) {
+            try {
+                Object value = getValueForConstant(key);
+                json.put(key, value);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        writer.write(json.toJSONString());
+        writer.close();
+    } catch (IOException | ParseException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
+}
+  
   public JSONObject getJsonObjectFromFile() throws IOException, ParseException {
     File file = getFile();
     if (file == null || !file.exists()) {
@@ -103,6 +130,8 @@ public abstract class ConstantsBase {
     System.err.println("Field " + name + " not found!");
     return null;
   }
+  
+  
 
   public Object getValueForConstant(String name, Object defaultValue) throws Exception {
     return getValueForConstant(name) == null ? defaultValue : getValueForConstant(name);
